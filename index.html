@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <title>Anniversary</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&family=Quicksand:wght@300&family=Poppins:wght@300&family=Dancing+Script&display=swap"
+    rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -15,7 +17,7 @@
       align-items: center;
       background: linear-gradient(135deg, #ffdde1, #ee9ca7);
       overflow: hidden;
-      font-family: 'Great Vibes', cursive;
+      font-family: 'Raleway', sans-serif;
       font-weight: 300;
     }
 
@@ -246,7 +248,7 @@
     .calendar-timer {
       font-size: 60px;
       font-weight: bold;
-      margin: 20px 0;
+      margin: 20px 10px;
       color: #87CEEB;
       display: flex;
       justify-content: center;
@@ -330,7 +332,7 @@
   <!-- Màn hình nhập mật khẩu -->
   <div class="container" id="loginScreen">
     <div class="left">
-      <img src="img/img4.jpg" alt="Kỷ niệm">
+      <img src="img/img10.jpg" alt="Kỷ niệm">
     </div>
     <div class="right">
       <input type="text" id="passwordInput" readonly placeholder="Enter Password">
@@ -366,18 +368,9 @@
   <div class="overlay" id="letterOverlay">
     <div class="letter-box">
       <div class="close-btn" onclick="closeLetterPopup()"><i class="fa-solid fa-x"></i></div>
-      <h2>💌 Gửi em yêu</h2>
-      <p>
-        Hôm nay là một ngày thật đặc biệt – ngày kỷ niệm tình yêu của chúng ta. Anh muốn dành vài dòng này để nói rằng
-        anh cảm thấy may mắn như thế nào khi có em ở bên.
-        Nhờ có em mà anh học được cách kiên nhẫn hơn, biết lắng nghe hơn và cũng cố gắng để trưởng thành hơn từng ngày.
-        Anh biết anh không hoàn hảo nhưng anh thật sự muốn trở thành một phiên bản tốt hơn và luôn muốn mang đến cho em
-        những điều tốt nhất trong khả năng của mình. Mong rằng chặng đường phía trước, chúng ta sẽ cùng nhau vượt qua
-        nhiều điều mới, cùng chia sẻ và cùng trưởng thành hơn.
-        Cảm ơn em đã đồng hành cùng anh trong khoảng thời gian vừa qua. Anh mong rằng đây chỉ mới là khởi đầu cho rất
-        nhiều ngày, tháng và năm sau này mà chúng ta sẽ đi cùng nhau.
-        Chúc mừng kỷ niệm của chúng ta! <br>
-        Anh yêu em moadd<i class="fa-solid fa-heart"></i>
+      <h2 id="letterTitle">💌 Gửi em yêu</h2>
+      <p id="letterContent">
+        <!-- Nội dung sẽ được gán bằng JS -->
       </p>
     </div>
   </div>
@@ -407,7 +400,11 @@
   </div>
 
   <script>
-    const correctPassword = "25052025";
+    // --- CẤU HÌNH MẬT KHẨU / QUYỀN TRUY CẬP ---
+    const correctPassword = "25052025"; // quyền đầy đủ (gốc)
+    const altPassword = "1";           // quyền phụ: sẽ hiển thị thư khác
+    let enteredRole = null; // 'full' hoặc 'alt' hoặc null
+
     let password = "";
 
     function pressNum(num) {
@@ -421,16 +418,63 @@
     }
 
     function checkPassword() {
-      if (password === correctPassword) {
-        document.getElementById("loginScreen").classList.add("hidden");
-        document.getElementById("mainScreen").classList.remove("hidden");
+      const trimmed = password.trim();
+      if (trimmed === correctPassword) {
+        enteredRole = 'full';
+        showMainScreen();
+      } else if (trimmed === altPassword) {
+        enteredRole = 'alt';
+        showMainScreen();
       } else {
         alert("Sai mật khẩu rồi 😢");
         clearInput();
       }
     }
 
+    function showMainScreen() {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("mainScreen").classList.remove("hidden");
+      clearInput(); // xóa input sau khi đăng nhập
+    }
+
+    // --- NỘI DUNG THƯ THEO QUYỀN ---
+    const fullLetterTitle = "💌 Gửi em yêu";
+    const fullLetterContent = `
+      Hôm nay là một ngày thật đặc biệt – ngày kỷ niệm tình yêu của chúng ta. Anh muốn dành vài dòng này để nói rằng
+      anh cảm thấy may mắn như thế nào khi có em ở bên.
+      Nhờ có em mà anh học được cách kiên nhẫn hơn, biết lắng nghe hơn và cũng cố gắng để trưởng thành hơn từng ngày.
+      Anh biết anh không hoàn hảo nhưng anh thật sự muốn trở thành một phiên bản tốt hơn và luôn muốn mang đến cho em
+      những điều tốt nhất trong khả năng của mình. Mong rằng chặng đường phía trước, chúng ta sẽ cùng nhau vượt qua
+      nhiều điều mới, cùng chia sẻ và cùng trưởng thành hơn.
+      Cảm ơn em đã đồng hành cùng anh trong khoảng thời gian vừa qua. Anh mong rằng đây chỉ mới là khởi đầu cho rất
+      nhiều ngày, tháng và năm sau này mà chúng ta sẽ đi cùng nhau.
+      Chúc mừng kỷ niệm của chúng ta! <br>
+      Anh yêu em moadd<i class="fa-solid fa-heart"></i>
+    `;
+
+    // Nội dung thay thế khi dùng pass phụ
+    const altLetterTitle = "💌";
+    const altLetterContent = `
+      This is privacy
+    `;
+
     function openLetterPopup() {
+      // Gán nội dung thư theo quyền
+      const titleEl = document.getElementById("letterTitle");
+      const contentEl = document.getElementById("letterContent");
+
+      if (enteredRole === 'full') {
+        titleEl.innerHTML = fullLetterTitle;
+        contentEl.innerHTML = fullLetterContent;
+      } else if (enteredRole === 'alt') {
+        titleEl.innerHTML = altLetterTitle;
+        contentEl.innerHTML = altLetterContent;
+      } else {
+        // Nếu chưa đăng nhập (phòng ngừa), không cho mở
+        alert("Vui lòng đăng nhập bằng mật khẩu hợp lệ để xem thư.");
+        return;
+      }
+
       document.getElementById("letterOverlay").style.display = "flex";
     }
     function closeLetterPopup() {
@@ -442,9 +486,9 @@
       const video = document.getElementById("anniversaryVideo");
       const bgMusic = document.getElementById("bgMusic");
 
-      video.play();   // phát video
+      video.play().catch(e => console.log("Không thể phát video:", e));
       if (!bgMusic.paused) {
-        bgMusic.pause(); // tạm dừng nhạc nền
+        bgMusic.pause();
       }
     }
 
@@ -453,7 +497,7 @@
       const video = document.getElementById("anniversaryVideo");
       const bgMusic = document.getElementById("bgMusic");
 
-      video.pause(); // dừng video
+      video.pause();
       bgMusic.play().catch(err => console.log("Không thể bật lại nhạc:", err));
     }
 
@@ -510,16 +554,27 @@
       }, 6000);
     }
 
-    setInterval(createHeart, 300);
+    // Giảm tần suất tim để tránh lag
+    setInterval(createHeart, 600);
 
     // Bật nhạc nền khi click lần đầu
     window.addEventListener("click", () => {
       const bgMusic = document.getElementById("bgMusic");
-      bgMusic.currentTime = 1; // phát từ giây 30
+      bgMusic.currentTime = 1; // phát từ giây 1
       bgMusic.play().catch(err => {
         console.log("Autoplay bị chặn:", err);
       });
     }, { once: true });
+
+    // Nếu tab mất focus tạm dừng nhạc
+    window.addEventListener("blur", () => {
+      const bgMusic = document.getElementById("bgMusic");
+      if (bgMusic) bgMusic.pause();
+    });
+    window.addEventListener("focus", () => {
+      const bgMusic = document.getElementById("bgMusic");
+      if (bgMusic) bgMusic.play().catch(() => { });
+    });
   </script>
 
   <!-- Nhạc nền -->
@@ -528,4 +583,5 @@
     Trình duyệt không hỗ trợ audio.
   </audio>
 </body>
+
 </html>
